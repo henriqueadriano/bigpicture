@@ -1,90 +1,188 @@
-# Tailwind Traders - Sample Reference Applications
+# Tailwind Traders Website
 
-We are happy to announce the release of Tailwind Traders. A fictitious retail company showcasing the future of intelligent application experiences. These reference apps are all are powered by the Azure cloud, built with best-in-class tools, and made smarter through data and AI.
+![Tailwind Traders Website](Documents/Images/Website.png)
 
-![Tailwind Traders Logo](Documents/Images/Logo.png)
+[![Build status](https://dev.azure.com/TailwindTraders/Website/_apis/build/status/Website-CI)](https://dev.azure.com/TailwindTraders/Website/_build?definitionId=22)
 
-# New to Microsoft Azure?
-
-You will need an Azure subscription to work with this demo code. You can:
-
-- Open an account for free [Azure subscription](https://azure.microsoft.com/free/). You get credits that can be used to try out paid Azure services. Even after the credits are used up, you can keep the account and use free Azure services and features, such as the Web Apps feature in Azure App Service.
-- [Activate Visual Studio subscriber benefits](https://azure.microsoft.com/pricing/member-offers/credit-for-visual-studio-subscribers/). Your Visual Studio subscription gives you credits every month that you can use for paid Azure services.
-- Create an [Azure Student Account](https://azure.microsoft.com/free/students/) and get free credit when you create your account.
-
-Learn more about it with [Microsoft Learn - Introduction to Azure](https://docs.microsoft.com/learn/azure).
 
 # Repositories
 
 For this demo reference, we built several consumer and line-of-business applications and a set of backend services. You can find all repositories in the following locations:
 
-* [Backend (AKS)](https://github.com/Microsoft/TailwindTraders-Backend) **ARCHIVED**
-* [Website (ASP.NET & React)](https://github.com/Microsoft/TailwindTraders-Website) **ARCHIVED**
-* [Desktop (WinForms & WPF -.NET Core)](https://github.com/Microsoft/TailwindTraders-Desktop) **ARCHIVED**
-* [Rewards (ASP.NET Framework)](https://github.com/Microsoft/TailwindTraders-Rewards) **ARCHIVED**
-* [Shipping Management (Power App + Azure Serverless)](https://github.com/microsoft/TailwindTraders-ShippingManagement) **ARCHIVED**
-* [Mobile (Xamarin Forms 4.0)](https://github.com/Microsoft/TailwindTraders-Mobile) - **ARCHIVED**
-* [Point of Sale (VB6 to ASP.NET Migration with Mobilize.net)](https://github.com/microsoft/TailwindTraders-PointOfSale) - **ARCHIVED**
+- [Tailwind Traders](https://github.com/Microsoft/TailwindTraders)
+- [Backend (AKS)](https://github.com/Microsoft/TailwindTraders-Backend)
+- [Website (ASP.NET & React)](https://github.com/Microsoft/TailwindTraders-Website)
+- [Desktop (WinForms & WPF -.NET Core)](https://github.com/Microsoft/TailwindTraders-Desktop)
+- [Rewards (ASP.NET Framework)](https://github.com/Microsoft/TailwindTraders-Rewards)
+- [Mobile (Xamarin Forms 4.0)](https://github.com/Microsoft/TailwindTraders-Mobile)
 
-As part of Connect(); 2018 we also released the [AI Vision Provision](https://github.com/Microsoft/AIVisualProvision) sample mobile app, which allows you to deploy Azure services from scanning Azure Services Logos or Text. The [AI Pet Detector](https://github.com/Microsoft/connect-petdetector) demo app is also available, learn how to create a Pet Detector image recognition with Azure Notebooks, Azure Machine Learning and Visual Studio Code.
+# Deploy to Azure
 
-# Demo Scripts
+With the following ARM template you can automate the creation of the resources for this website.
 
-You can find the **[demo scripts](Documents/DemoScripts)** that show the power of Azure, Visual Studio and GitHub.
+[![Deploy to Azure](Documents/Images/deploy-to-azure.png)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2FMicrosoft%2FTailwindTraders-Website%2Fmaster%2FDeploy%2Fdeployment.json)
 
- * **[Integrating Azure DevOps, Microsoft Teams and GitHub](https://github.com/microsoft/TailwindTraders/tree/master/Documents/DemoScripts/Integrating%20Azure%20DevOps%2C%20Microsoft%20Teams%20and%20GitHub#integrating-azure-devops-microsoft-teams-and-github)**  demonstrates the ability to easily use GitHub for hosting source code and use Azure Pipelines for continuous integration and continuous delivery to quickly deploy changes to Azure. Connect Azure Boards with GitHub repositories to take advantage of the rich project management capabilities provided by Azure Boards that spans Kanban boards, backlogs, team dashboards, and custom reporting, etc.
- 
-* **[Managing backend with Azure Kubernetes Service (AKS)](https://github.com/Microsoft/TailwindTraders/tree/master/Documents/DemoScripts/Managing%20backend%20with%20Azure%20Kubernetes%20Service%20(AKS))** learn how AKS allows you to managed orchestration of containers and also provides auto-patching, auto-scaling and updates support which enables you to use the full breadth of the Kubernetes ecosystem. Take advantage of Virtual Node that enables you to elastically provision additional nodes inside your Kubernetes clusters in just seconds, a first-of-its-kind serverless computing option with AKS enables you to provision and scale your Kubernetes based apps more efficiently.
+When you deploy this website to Azure you can define the [Backend](https://github.com/Microsoft/TailwindTraders-Backend) you want to use in case you have deploy your own backend. By defaults it is configured the public Backend environment provided by Microsoft.
 
-* **[Modernizing .NET Apps](https://github.com/Microsoft/TailwindTraders/tree/master/Documents/DemoScripts/Modernizing%20.NET%20Apps)** move apps to the cloud and take advantage of cloud native solutions to modernize it and explore the benefits of Azure App Services.
+> Note: you can change the InstrumentationKey of the **Application Insight** that is configured by default.
 
-* **[Productivity Improvements in Visual Studio 2019](https://github.com/Microsoft/TailwindTraders/tree/master/Documents/DemoScripts/Productivity%20Improvements%20in%20Visual%20Studio%202019)** the new version contains many new and exciting features and IDE productivity enhancements to support Windows app development, cross-platform mobile development, Azure development, web and cloud development, and more.
+If you want to update the application to use your own [backend](https://github.com/Microsoft/TailwindTraders-Backend), set `apiBaseUrl` parameter on the ARM template provided to the url where your aks is configured.
 
-* **[Visual Studio App Center Capabilities](https://github.com/Microsoft/TailwindTraders/tree/master/Documents/DemoScripts/Visual%20Studio%20App%20Center%20Capabilities)** Automate the Build-Test-Distribute process for your mobile projects in GitHub. Continuous Integration and Continuous Delivery (CI/CD) with UI Test.
+e.g. In order to know your AKS route you could run the following command:
 
-# Application Diagram
+```bash
+az aks show -n <aks-name> -g <resource-group> --query "addonProfiles.httpApplicationRouting.config.HTTPApplicationRoutingZoneName"
+```
 
-![Tailwind Traders Application Diagram](Documents/Images/Diagram.png)
+And it will return your base [TailwindTraders-Backend](https://github.com/Microsoft/TailwindTraders-Backend) url. Note that this will work only if your Backend is configured with the `addon-http-application-routing` ingress class (as it's by default).
 
-# Application Screens
+# Setting up Azure Communication Services
 
-![Tailwind Traders Website](Documents/Images/Website.png)
+Please follow these steps to setup the web to enable customer support chat and audio/video call flow.
 
-![Tailwind Traders Mobile Apps](Documents/Images/Mobile.png)
+## Pre-Requisites:
+1. **You must have Azure Communication Services resource and  also the logic app setup.** Please follow the instructions on [Tailwind Traders Logic App](../TailwindTradersLogicApp) to deploy the logic app.
+2. A Microsoft Teams subscription to allow teams interoperability with Azure Communication Services.
 
-![Tailwind Traders Rewards](Documents/Images/Rewards.png)
+## Add config variables:
+Edit the following variables in the [appsettings.json](TailwindTraders.Website/Source/Tailwind.Traders.Web/appsettings.json) file.
 
-![Tailwind Traders Desktop](Documents/Images/Desktop.png)
+```
+{
+  connectionString: <ACS_CONNECTION_STRING>,
+  acsResource: <ACS_RESOURCE_URL>,
+  logicAppUrl: <LOGIC_APP_URL>,
+  email: <SUPPORT_EMAIL>,
+}
+```
+> Support email is the account which will receive a Flow bot message with the meeting details on Microsoft Teams.
 
-# Feedback
+# Deploy as part of AKS (Azure Kubernetes Service)
 
-[Help us improving this reference applications by providing us your valuable opinion.](https://forms.office.com/Pages/ResponsePage.aspx?id=v4j5cvGGr0GRqy180BHbR8SMkUX-TIVBhIdeQCM_fI1UNEJIUDhKQjE0S1RWNlRJSVNISFNCUlVXSyQlQCN0PWcu)
+Please follow these steps to deploy the web in the same AKS where Backend is running instead of deploying to an App Service.
 
-# Blog posts and videos
+**Note**: Website supports [Devspaces deployment](./Documents/Devspaces.md).
 
-Azure Friday: An overview of the Tailwind Traders reference apps for Azure
+## Pre-Requisites:
 
-[![Azure Friday: An overview of the Tailwind Traders reference apps for Azure](http://img.youtube.com/vi/EP-PME-1tq0/0.jpg)](http://www.youtube.com/watch?v=EP-PME-1tq0)
+1. **You must have an AKS with all the Tailwind Traders Backend Up & Running**. Please follow the instructions on [Tailwind Traders Backend repo](https://github.com/Microsoft/TailwindTraders-Backend/) to deploy the backend on AKS.
 
-Visual Studio 2019 Launch Event:
+1. **You can't install the web on a AKS Before installing the Backend on it**. This is because some configuration steps that are done when installing the Backend are needed.
 
-[![Visual Studio 2019 Launch: Not your average keynote](http://img.youtube.com/vi/DANLUUIUrcM/0.jpg)](http://www.youtube.com/watch?v=DANLUUIUrcM)
+> Note: This document assumes you have the backend installed on an AKS and the `kubectl` is configured against this cluster.
 
-Videos and blog posts from Connect(); 2018:
+## Build and push the docker image
 
-- [Scott Guthrie's blog post](https://blogs.microsoft.com/blog/2018/12/04/empowering-every-developer-to-achieve-more-at-microsoft-connect-2018)
+You need to build & push the docker image for the web. You can use `docker-compose` for this task. You **must set two environment variables** before launching compose:
 
-- Scott Guthrie's Keynote:
+- `TAG`: Tag to use for the generated docker image.
+- `REGISTRY`: Must be the login server of the ACR where Backend is installed.
 
-[![Scott Guthrie's Keynote](http://img.youtube.com/vi/neij6TfYaIk/0.jpg)](http://www.youtube.com/watch?v=neij6TfYaIk)
+Then you need to login into the ACR by typing: `docker login -u <username> -p <password> <acr-login-server>` where `<username>` and `<password>` are the ACR credentials.
 
-- Scott Hanselman's Keynote:
+Once logged in ACR you can build the web:
 
-[![Scott Hanselman's Keynote](http://img.youtube.com/vi/5_iE7azx7Vo/0.jpg)](http://www.youtube.com/watch?v=5_iE7azx7Vo)
+```
+docker-compose build
+```
+
+And then you can push the images in ACR:
+
+```
+docker-compose push
+```
+
+## Deploy the image on the cluster using Helm
+
+To deploy the web on the AKS you can use the `DeployWebAKS.ps1` script in `/Deploy` folder. This script have following parameters:
+
+- `-aksName`: Name of the AKS (same AKS where Backend is)
+- `-resourceGroup`: Resource group of the AKS
+- `-acrName`: ACR where image is pushed. Has to be the same ACR where Backend images are.
+- `-tag`: Tag to use for the Docker image of the Web
+- `-valueSFile`: YAML files containing the values. Defaults to `gvalues.yaml`. You can use the provided `gvalues.yaml` as-is, so don't need to specify this parameter.
+- `-b2cValuesFile`: YAML file with the B2C configuration values. Defaults to `values.b2c.yaml`. If B2C login is needed, you must fill the values in the file in order to configure it.
+- `-tlsEnv`: TLS environment (staging or prod) that is installed in the cluster. Refer to the Backend repo for more information.
+- `-appInsightsName`: Application Insights' name for monitoring purposes. 
+  > **Note** The DeployWebAKS.ps1 uses, only if -appInsightsName is paseed, the _application-insights_ CLI extension to find the application insights id. Install it with `az extension add --name application-insights` if you pass it.
+- `-acsConnectionString`: Acs connection string.
+- `-acsResource`: Acs endpoint.
+- `-logicAppUrl`: Logic app trigger url.
+- `-acsEmail`: Support email account which will receive a Flow bot message.
+
+To install the web in AKS my-aks using production TLS certificates, located in resource group my-rg and using an ACR named `my-acr` you can type:
+
+```
+.\DeployWebAKS.ps1 -aksName my-aks -resourceGroup my-rg -acrName my-acr -tag latest -tlsEnv prod -acsResource <my-acs> -acsConnectionString <acs-connection-string> -acsEmail <acs-email> -logicAppUrl <logic-app-url>
+```
+
+# How to use the customer support chat and audio/video call
+
+To use the customer support chat/call experience click on the chat bubble on the homepage and select the type of interaction.
+
+![Homepage chat bubble](Documents/Images/Docs/homepage-chat-bubble.png)
+
+After being redirected to the call/chat page as per your selection enter your name and then click on Done once the chat/join meeting option is enabled click to join the conversation.
+
+![Enter name](Documents/Images/Docs/meeting-enter-name.png)
+
+![Join meeting](Documents/Images/Docs/meeting-join.png)
+
+At this moment you're in the lobby once the meeting organizer lets you in the chat/call is accessible.
+
+![Meeting](Documents/Images/Docs/meeting-in-call.png)
+
+![Meeting](Documents/Images/Docs/chat.png)
+
+
+After joining in via chat/call the user is also provided with the option to switch from chat-to-call and vice-versa.
+
+![Switch to chat](Documents/Images/Docs/call-switch.png)![Switch to call](Documents/Images/Docs/chat-switch.png)
+
+
+
+
+# How to use the product search by photo
+
+To use the product search, we need to upload a photo, the website redirects to suggested products showing 3 products or less, except if only suggest 1 product. When you have only 1 suggested product, the website redirects to detail of product.
+
+Steps to search:
+
+1. In home of the website, click in the "Start smart shopping" button.
+
+![Start Smart Shopping Button](Documents/Images/Docs/Start_Smart_Shopping_Button.PNG)
+
+2. Select a photo to upload and send it.
+   - If website has more than 1 suggested products
+     - Website redirect to suggested products.
+   - If website has only a one suggested product.
+     - Website redirects to details of product.
+
+To use this search, you can use the images in:
+
+- [Documents/Images/TestImages](Documents/Images/TestImages)
+
+### Rechargable screwdriver sample
+
+If you select the [Electric Screwdriver](Documents/Images/TestImages/electric_screwdriver.jpg) should be appears 3 suggested products similar to:
+
+![Rechargeable Screwdriver Suggested Products](Documents/Images/Docs/rechargeable_Screwdriver_Suggested_Products.PNG)
+
+### Multi-tool plier sample
+
+If you select the [Multi-Tool Plier](Documents/Images/TestImages/multi-tool_plier.jpg) should be appears 3 suggested products similar to:
+
+![Multi-Tool Plier Suggested Products](Documents/Images/Docs/multi-tool_plier_Suggested_Products.PNG)
+
+### Hard hat sample
+
+If you select the [Hard Hat](Documents/Images/TestImages/hard_hat.jpg) should be redirect to product detail, beacuse only have a 1 suggested product:
+
+![Hard Hat Suggested Product Detail](Documents/Images/Docs/hard_Hat_Suggested_Product_Detail.PNG)
 
 # Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.microsoft.com.
 
