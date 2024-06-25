@@ -5,8 +5,6 @@
 [![Build status](https://dev.azure.com/TailwindTraders/Website/_apis/build/status/Website-CI)](https://dev.azure.com/TailwindTraders/Website/_build?definitionId=22)
 
 
-# Repositories
-
 For this demo reference, we built several consumer and line-of-business applications and a set of backend services. You can find all repositories in the following locations:
 
 - [Tailwind Traders](https://github.com/Microsoft/TailwindTraders)
